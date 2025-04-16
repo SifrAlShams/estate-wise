@@ -15,20 +15,20 @@ faq_vdb_retriever = faiss_vectordb.as_retriever(search_type="similarity_score_th
 
 # if __name__ == "__main__":
 #     # -----------------------------------------------------#
-
+#
 #     query = "where is your head office?"
 #     # # vectordb similarity search
 #     start_time = time.time()
-    
+#
 #     results = faiss_vectordb.similarity_search(
 #         query,
 #         k=2,
 #     )
-    
+#
 #     end_time = time.time()
-    
+#
 #     print(f"Time taken for retrieval: {end_time - start_time}")
-    
+#
 #     for res in results:
 #         print("Page Content: ")
 #         print(res.page_content)
