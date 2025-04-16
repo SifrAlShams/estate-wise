@@ -10,7 +10,7 @@ faiss_vectordb = FAISS.load_local(
     "faq_vector_db", hf_embeddings, allow_dangerous_deserialization=True
 )
 
-faq_vdb_retriever = faiss_vectordb.as_retriever(search_type="similarity_score_threshold", search_kwargs={"k": 3,"score_threshold": 0.8})
+faq_vdb_retriever = faiss_vectordb.as_retriever(search_type="mmr", search_kwargs={"k": 3})
 
 
 # if __name__ == "__main__":
