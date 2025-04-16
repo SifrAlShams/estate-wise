@@ -1,3 +1,8 @@
 venv/
 .idea
 datafiles/
+view_calender/
+credentials.json
+token.pickle
+test_queries.json
+.env
