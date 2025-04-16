@@ -80,7 +80,7 @@ def generate(state: AgentState):
 
     messages = state["messages"]
 
-    print(messages)
+    # print(messages)
 
     if state['use_case'][-1] == 'general':
         agent_response = llm.invoke([general_system_msg] + list(messages))
