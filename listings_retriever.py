@@ -2,19 +2,17 @@ import time
 from langchain_community.vectorstores import FAISS
 from utils.embedding_model import hf_embeddings
 
-
 # load locally saved FAISS
 faiss_vectordb = FAISS.load_local(
-    "faq_vector_db", hf_embeddings, allow_dangerous_deserialization=True
+    "listings_vector_db", hf_embeddings, allow_dangerous_deserialization=True
 )
 
-faq_vdb_retriever = faiss_vectordb.as_retriever(search_type="mmr", search_kwargs={"k": 3})
-
+listings_retriever = faiss_vectordb.as_retriever(search_type="mmr", search_kwargs={"k": 3})
 
 # if __name__ == "__main__":
 #     # -----------------------------------------------------#
 #
-#     query = "where is your head office?"
+#     query = "5 bedrooms house"
 #     # # vectordb similarity search
 #     start_time = time.time()
 #
@@ -32,11 +30,11 @@ faq_vdb_retriever = faiss_vectordb.as_retriever(search_type="mmr", search_kwargs
 #         print(res.page_content)
 #         print("Metadata: ")
 #         print(res.metadata)
-    
-    
-    # vectordb as retriever
-    # response = faq_vdb_retriever.invoke(query)
-    # print(response, type(response))
-    # for retrieved_doc in response:
-    #     print(retrieved_doc.metadata)
-    #     print(retrieved_doc.page_content)
+#
+#
+#     # vectordb as retriever
+#     response = listings_retriever.invoke(query)
+#     print(response, type(response))
+#     for retrieved_doc in response:
+#         print(retrieved_doc.metadata)
+#         print(retrieved_doc.page_content)

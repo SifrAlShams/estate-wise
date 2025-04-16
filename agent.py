@@ -8,7 +8,6 @@ from langgraph.graph.message import add_messages
 
 from langgraph.graph import StateGraph, START, END
 from langgraph.prebuilt import tools_condition, ToolNode
-from langchain_core.output_parsers import StrOutputParser
 
 from langgraph.checkpoint.memory import MemorySaver
 
@@ -16,10 +15,10 @@ import time
 
 from utils.model import llm
 from prompts.agent_prompts import intent_system_msg, chatbot_system_msg
-from utils.custom_tools import faq_retriever_tool
+from utils.custom_tools import faq_retriever_tool, listings_retriever_tool
 
 
-tools = [faq_retriever_tool]
+tools = [faq_retriever_tool, listings_retriever_tool]
 
 
 #### Agent Class
