@@ -14,12 +14,24 @@ from langgraph.checkpoint.memory import MemorySaver
 
 import time
 
+from utils.extract_data_from_input import extract
 from utils.model import llm
-from prompts.agent_prompts import intent_system_msg, chatbot_system_msg, generate_system_msg, general_system_msg
-from utils.custom_tools import faq_retriever_tool, listings_retriever_tool
+from prompts.agent_prompts import intent_system_msg, chatbot_system_msg, generate_system_msg, general_system_msg, \
+    client_detail_gathering
+from utils.custom_tools import faq_retriever_tool, listings_retriever_tool, datetime_tool
+
+from utils.custom_tools import is_date_available, add_meeting_to_calender
+from utils.google_calender_utils.get_service import service
 
 
+datetime_tools = [datetime_tool]
 tools = [faq_retriever_tool, listings_retriever_tool]
+
+# user_input = []
+user_name = []
+user_email = []
+meeting_date = []
+connect_called = []
 
 
 #### Agent Class
@@ -91,6 +103,49 @@ def generate(state: AgentState):
 
 
 
+def schedule_meeting(state: AgentState):
+    global user_name, user_email, meeting_date, connect_called
+    print("---SCHEDULE MEETING NODE---")
+
+    connect_called.append("True")
+    if len(connect_called) > 1:
+        print("Extracting Information")
+        user_input = state["user_input"][-1]
+        data = extract(user_input)
+
+        for k, v in data.items():
+            if v is not None:
+                if k == 'name':
+                    user_name.append(v)
+                elif k == 'email':
+                    user_email.append(v)
+                elif k == 'date':
+                    meeting_date.append(v)
+    if len(user_name) > 0 and len(user_email) > 0 and len(meeting_date) > 0:
+        print("ALL DATA GATHERED!")
+        print(user_email, user_name, meeting_date)
+
+        client_data = {
+            "name": user_name[-1],
+            "email": user_email[-1],
+            "date": meeting_date[-1]
+        }
+
+        if is_date_available(client_data, service):
+            scheduling_response = add_meeting_to_calender(client_data, service)
+            return {"messages": state["messages"] + [scheduling_response]}
+
+        else:
+            return {"messages": state["messages"] + ["Sorry, we are not available on this date."]}
+
+    messages = state["messages"]
+
+    system_message = client_detail_gathering
+    model = llm.bind_tools(datetime_tools)
+    agent_response = model.invoke([system_message] + list(messages))
+
+    return {"messages": agent_response}
+
 #### Graph Compilation
 workflow = StateGraph(AgentState)
 
@@ -99,12 +154,14 @@ tool_node_object = ToolNode(tools)
 workflow.add_node("tools-node", tool_node_object)
 workflow.add_node("agent-node", agent)
 workflow.add_node("generate-node", generate)
+workflow.add_node("scheduling-node", schedule_meeting)
 
 # add edges
 workflow.add_conditional_edges(
     START,
     intent_classification,
     {
+        "connect": "scheduling-node",
         "general": "generate-node",
         "listings": "agent-node",
         "faq": "agent-node",
@@ -152,11 +209,11 @@ def get_response(query, agent_config):
         return final_response, f"10 seconds"
 
 
-if __name__ == "__main__":
-    config = {"configurable": {"thread_id": "test_user_1"}}
-    while True:
-        user_query = input("User Input: ")
-
-        response, res_time = get_response(user_query, config)
-        print("Final Response from Agent: ")
-        print(response)
+# if __name__ == "__main__":
+#     config = {"configurable": {"thread_id": "test_user_1"}}
+#     while True:
+#         user_query = input("User Input: ")
+#
+#         response, res_time = get_response(user_query, config)
+#         print("Final Response from Agent: ")
+#         print(response)
