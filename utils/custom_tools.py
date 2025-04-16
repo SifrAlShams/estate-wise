@@ -5,6 +5,7 @@ from listings_retriever import listings_retriever
 
 
 def faq_retriever_tool(query: str):
+    """This tool is called when user query is about FAQs."""
     retrieved_docs = faq_vdb_retriever.invoke(query)
 
     if not retrieved_docs:
@@ -23,6 +24,7 @@ def faq_retriever_tool(query: str):
 
 
 def listings_retriever_tool(query: str):
+    """This is a tool called when user query is about property."""
     retrieved_docs = listings_retriever.invoke(query)
 
     if not retrieved_docs:

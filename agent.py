@@ -1,9 +1,10 @@
 from typing import Annotated, Sequence
 
+from langchain_core.output_parsers import StrOutputParser
 from langgraph.errors import GraphRecursionError
 from typing_extensions import TypedDict
 
-from langchain_core.messages import BaseMessage, AIMessage, HumanMessage
+from langchain_core.messages import BaseMessage, AIMessage, HumanMessage, ToolMessage
 from langgraph.graph.message import add_messages
 
 from langgraph.graph import StateGraph, START, END
@@ -14,7 +15,7 @@ from langgraph.checkpoint.memory import MemorySaver
 import time
 
 from utils.model import llm
-from prompts.agent_prompts import intent_system_msg, chatbot_system_msg
+from prompts.agent_prompts import intent_system_msg, chatbot_system_msg, generate_system_msg, general_system_msg
 from utils.custom_tools import faq_retriever_tool, listings_retriever_tool
 
 
@@ -57,12 +58,36 @@ def agent(state: AgentState):
     model = llm.bind_tools(tools)
 
     agent_response = model.invoke([agent_system_msg] + list(messages))
-
+    print(agent_response)
     return {"messages": [agent_response]}
 
 
 def generate(state: AgentState):
-    pass
+    print(f'---GENERATE--- docs len {len(state["messages"])}')
+    print(f"USE CASE: {state['use_case']}")
+
+    messages = state["messages"]
+
+    print(messages)
+
+    if state['use_case'][-1] == 'general':
+        agent_response = llm.invoke([general_system_msg] + list(messages))
+        return {"messages": [agent_response]}
+
+    if isinstance(state['messages'][-1], AIMessage):
+        return {'messages': [state['messages'][-1]]}
+
+    elif isinstance(state['messages'][-1], ToolMessage):
+        user_inp = state['user_input'][-1]
+
+        prompt = generate_system_msg
+        model = llm
+
+        rag_chain = prompt | model | StrOutputParser()
+
+        agent_response = rag_chain.invoke({"knowledge": messages[-1].content, "question": user_inp})
+
+        return {"messages": [agent_response]}
 
 
 
