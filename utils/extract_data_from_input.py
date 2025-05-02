@@ -3,7 +3,7 @@ import json
 from langchain_core.output_parsers import StrOutputParser
 
 from prompts.agent_prompts import extract_prompt
-from utils.model import llm
+from utils.models.import_llm import llm
 
 
 def extract(user_input):

@@ -5,7 +5,6 @@ python-dotenv~=1.0.1
 langgraph~=0.2.76
 langchain-text-splitters~=0.3.7
 langchain~=0.3.21
-typing_extensions~=4.12.2
 fastapi~=0.115.11
 pydantic~=2.10.6
 streamlit~=1.42.2
@@ -13,3 +12,16 @@ google-auth-oauthlib~=1.2.1
 google-api-python-client~=2.162.0
 pytz~=2025.1
 requests~=2.32.3
+groq~=0.23.1
+typing_extensions~=4.12.2
+pydub~=0.25.1
+ffmpeg~=1.4
+pyaudio~=0.2.14
+langchain-nvidia-ai-endpoints
+langchain-groq
+uvicorn
+google-auth-oauthlib
+google-auth
+google-auth-httplib2
+google-api-python-client
+langchain-huggingface

@@ -12,6 +12,8 @@ llm = ChatGroq(
     max_retries=2,
 )
 
+
+
 # messages = [
 #     (
 #         "system",
