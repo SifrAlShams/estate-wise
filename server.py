@@ -2,8 +2,11 @@ import time
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import StreamingResponse
 
 from pydantic import BaseModel
+
+import io
 
 from agent import get_response
 from utils.whisper_transcription import transcribe_audio_file
@@ -47,21 +50,27 @@ def get_agent_response(request: GetResponse):
     }
         
 
+import tempfile
+from fastapi import UploadFile, File
+from fastapi.responses import JSONResponse
+
 
 @app.post("/transcribe/")
-def transcribe_audio(request: FilePathRequest):
+async def transcribe_audio(file: UploadFile = File(...)):
     try:
-        print(request.file_path)
-        transcript = transcribe_audio_file(request.file_path)
-        print(transcript)
-        
-        return {
-            'transcription': transcript
-        }
-    except FileNotFoundError:
-        return {"error": f"File not found: {request.file_path}"}
+        # Save uploaded file to disk (Groq Whisper needs a path)
+        with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as tmp:
+            tmp.write(await file.read())
+            tmp.flush()
+            temp_path = tmp.name
+
+        # Transcribe using Groq (which expects file path)
+        transcript = transcribe_audio_file(temp_path)
+        return {"transcription": transcript}
+
     except Exception as e:
-        return {"error": str(e)}
+        return JSONResponse(status_code=500, content={"error": str(e)})
+
 
 
 @app.post("/tts/")
@@ -71,9 +80,9 @@ def generate_tts(request: TextToSpeechRequest):
         audio_path = text_to_speech_file(request.text)
         print(f"Generated audio at: {audio_path}")
 
-        return {
-            "audio_path": audio_path
-        }
+        audio_bytes = open(audio_path, "rb").read()
+        return StreamingResponse(io.BytesIO(audio_bytes), media_type="audio/wav")
+
     except Exception as e:
         return {"error": str(e)}
     

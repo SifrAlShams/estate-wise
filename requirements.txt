@@ -25,5 +25,5 @@ google-auth~= 2.39.0
 google-auth-httplib2~= 0.2.0
 google-api-python-client~=2.162.0
 langchain-huggingface~=0.1.2
-pyaudio~=0.2.14
 elevenlabs~= 1.57.0
+python-multipart

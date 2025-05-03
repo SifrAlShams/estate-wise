@@ -1,66 +1,31 @@
 import streamlit as st
-from utils.take_sound_input import StreamlitMicRecorder
-import uuid
 import requests
-
-
+import uuid
 
 BASE_URL = "http://localhost:8000/"
 
-if "chat_history" not in st.session_state:
-    st.session_state.chat_history = []
+st.title("🎙️ Browser Mic Chat App")
 
-file_name = str(uuid.uuid4())
+audio_data = st.audio_input("🎤 Record a message")
 
-st.title("🎙️ Streamlit Microphone Recorder")
+if audio_data is not None:
+    st.audio(audio_data, format="audio/wav")
 
+    with st.spinner("Transcribing and generating response..."):
+        response = requests.post(
+            f"{BASE_URL}/transcribe/",
+            files={"file": ("user_audio.wav", audio_data.getvalue(), "audio/wav")}
+        )
+        print("RESPONSE STATUS:", response.status_code)
+        print("RESPONSE TEXT:", response.text)
 
-if 'recorder' not in st.session_state:
-    st.session_state.recorder = StreamlitMicRecorder(filename=f'{file_name}.wav')
+        transcript = response.json()["transcription"]
 
+        agent_result = requests.post(f"{BASE_URL}/get_agent_response/", json={"agent_input": transcript})
+        agent_data = agent_result.json()
 
-for entry in st.session_state.chat_history:
-    with st.chat_message("user"):
-        st.audio(entry["user_audio"], format="audio/wav", start_time=0)
-    with st.chat_message("assistant"):
-        st.audio(entry["response_audio"], format="audio/wav", start_time=0)
+        tts_response = requests.post(f"{BASE_URL}/tts/", json={"text": agent_data["agent_response"]})
+        if tts_response.status_code == 200:
+            audio_bytes = tts_response.content  # The raw WAV bytes
+            st.audio(audio_bytes, format="audio/wav")
 
-
-st.markdown("-------------------------------------")
-col1, col2 = st.columns([1, 5])
-with col2:
-    if st.button("🎤 Start Recording"):
-        st.session_state.recorder.start()
-        st.success("Recording started...")
-    
-    if st.button("Stop Recording"):
-        st.session_state.recorder.stop()
-        st.success(f"Recording stopped. Saved to {st.session_state.recorder.filename}")
-        print("PATH TO INPUT AUDIO FILE: ", st.session_state.recorder.filename)
-
-        input_file_path = st.session_state.recorder.filename
-
-        with st.spinner("Transcribing and generating response..."):
-            transcription_result = requests.post(f"{BASE_URL}/transcribe/", json={"file_path": input_file_path})
-        
-        if transcription_result.status_code == 200:
-            input_transcript = transcription_result.text
-            # agent call
-            agent_api_result = requests.post(f"{BASE_URL}/get_agent_response/", json={"agent_input": input_transcript})
-            if agent_api_result.status_code == 200:
-                agent_data = agent_api_result.json()
-                print(f"Agent Response: {agent_data['agent_response']}")
-                print(f"Latency in agent: {agent_data['agent_latency']}")
-                
-                tts_api_result = requests.post(f"{BASE_URL}/tts/", json={"text": agent_data['agent_response']})
-                tts_data = tts_api_result.json()
-                output_audio_file = tts_data['audio_path']
-                
-                st.session_state.chat_history.append({
-                    "user_audio": input_file_path,
-                    "response_audio": output_audio_file
-                })
-                
-                st.rerun()
-        else:
-            st.error("⚠️ Failed to process audio. Try again!")

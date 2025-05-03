@@ -27,8 +27,8 @@ def transcribe_audio_file(filepath: str, prompt: str = "Specify context or spell
             language="en",
             temperature=0.0
         )
-    audio_transcript = json.dumps(transcription.text, indent=2, default=str)
-    return audio_transcript
+    print(transcription.text)
+    return transcription.text
 
 
 
