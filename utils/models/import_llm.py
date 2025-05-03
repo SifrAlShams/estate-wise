@@ -6,6 +6,7 @@ import time
 
 
 mistral_model = 'nv-mistralai/mistral-nemo-12b-instruct'
+
 llama_model = 'meta/llama-3.3-70b-instruct'
 
 llm = ChatNVIDIA(model=llama_model)
