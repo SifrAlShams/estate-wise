@@ -15,7 +15,8 @@ from langgraph.checkpoint.memory import MemorySaver
 import time
 
 from utils.extract_data_from_input import extract
-from utils.models.import_llm import llm
+# from utils.models.import_llm import llm
+from utils.models.llama4_scout_groq import llm
 from prompts.agent_prompts import intent_system_msg, chatbot_system_msg, generate_system_msg, general_system_msg, \
     client_detail_gathering
 from utils.custom_tools import faq_retriever_tool, listings_retriever_tool, datetime_tool

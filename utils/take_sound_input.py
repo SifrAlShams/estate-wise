@@ -3,12 +3,9 @@ import wave
 import threading
 import os
 
-
-
-import os
 os.environ['INPUT_SOUND_FILES_PATH'] = 'datafiles/recordings/'
 input_files_dir = str(os.getenv('INPUT_SOUND_FILES_PATH'))
-print(input_files_dir)
+# print(input_files_dir)
 
 
 
