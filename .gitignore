@@ -1,7 +1,6 @@
 .venv/
-.env
+
 view_calender/
-credentials.json
-token.pickle
+
 test_queries.json
 test.py
