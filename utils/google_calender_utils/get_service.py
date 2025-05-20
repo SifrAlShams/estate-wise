@@ -22,8 +22,10 @@ def authenticate_google():
     return creds
 
 # Streamlit UI
-st.title("Check Calendar Availability")
+# st.title("Check Calendar Availability")
 
 # Authenticate
-creds = authenticate_google()
-service = build('calendar', 'v3', credentials=creds)
+def auth_google():
+    creds = authenticate_google()
+    service = build('calendar', 'v3', credentials=creds)
+    return service
