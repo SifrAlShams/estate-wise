@@ -22,7 +22,7 @@ from prompts.agent_prompts import intent_system_msg, chatbot_system_msg, generat
 from utils.custom_tools import faq_retriever_tool, listings_retriever_tool, datetime_tool
 
 from utils.custom_tools import is_date_available, add_meeting_to_calender
-from utils.google_calender_utils.get_service import service
+from utils.google_calender_utils.get_service import auth_google
 
 
 datetime_tools = [datetime_tool]
@@ -132,7 +132,7 @@ def schedule_meeting(state: AgentState):
             "email": user_email[-1],
             "date": meeting_date[-1]
         }
-
+        service = auth_google()
         if is_date_available(client_data, service):
             scheduling_response = add_meeting_to_calender(client_data, service)
             return {"messages": state["messages"] + [scheduling_response]}
