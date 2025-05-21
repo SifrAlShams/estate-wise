@@ -1,15 +1,25 @@
 from dotenv import load_dotenv
 load_dotenv()
-from langchain_nvidia_ai_endpoints import ChatNVIDIA
+# from langchain_nvidia_ai_endpoints import ChatNVIDIA
 import time
 
 
 
-mistral_model = 'nv-mistralai/mistral-nemo-12b-instruct'
+# mistral_model = 'nv-mistralai/mistral-nemo-12b-instruct'
 
-llama_model = 'meta/llama-3.3-70b-instruct'
+# llama_model = 'meta/llama-3.3-70b-instruct'
 
-llm = ChatNVIDIA(model=llama_model)
+# llm = ChatNVIDIA(model=llama_model)
+
+import os
+from dotenv import load_dotenv
+from langchain_openai import ChatOpenAI
+
+
+load_dotenv()
+openai_api_key = os.getenv('OPENAI_API_KEY')
+
+llm = ChatOpenAI(model="gpt-4o", api_key=openai_api_key, max_tokens=16000)
 
 # ---------------------------------------------------------
 # tool_models = [
