@@ -37,6 +37,9 @@ EstateWise is an AI-powered real estate voice agent enabling users to interact v
 
 ---
 
+## Agent Architecture
+![Agent Flow](media/agent_diagram.png)
+
 ## Prerequisites
 
 * Python >= 3.10
@@ -162,3 +165,6 @@ For questions, suggestions, or support, open an issue or contact the maintainer 
 ---
 
 
+
+
+[def]: media/agent_diagram.png
