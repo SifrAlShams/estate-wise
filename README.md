@@ -9,7 +9,7 @@ EstateWise is an AI-powered real estate voice agent that enables users to intera
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 .
@@ -39,7 +39,7 @@ EstateWise is an AI-powered real estate voice agent that enables users to intera
 
 ---
 
-## 📚 Prerequisites
+## Prerequisites
 
 * Python >= 3.10
 * FFmpeg installed (required by pydub)
@@ -47,7 +47,7 @@ EstateWise is an AI-powered real estate voice agent that enables users to intera
 
 ---
 
-## 🚀 Installation Guide
+## Installation Guide
 
 ### 1. Clone the Repository
 
@@ -83,7 +83,7 @@ ELEVENLABS_API_KEY=your_elevenlabs_key
 ASSEMBLYAI_API_KEY=your_assemblyai_key
 ```
 
-> ✉️ Replace `your_*_key` with your actual API keys.
+> Replace `your_*_key` with your actual API keys.
 
 ### 5. Add Google Calendar Credentials
 
@@ -91,7 +91,7 @@ Place `credentials.json` (from Google Cloud) in the root directory.
 
 ---
 
-## 🌐 Run the App
+## Run the App
 
 ### Option 1: Streamlit Frontend
 
@@ -111,14 +111,14 @@ Access docs at `http://localhost:8000/docs`
 
 ---
 
-## 📅 Google Calendar Integration
+## Google Calendar Integration
 
 * On first use, a browser window will open to authorize access to your calendar.
 * A `token.pickle` file will be generated for future use.
 
 ---
 
-## 🔧 Vector DB Setup (Only First Time)
+## Vector DB Setup (Only First Time)
 
 If not already generated, run:
 
@@ -129,7 +129,7 @@ python scripts/create_listings_vectordb.py   # For listings
 
 ---
 
-## 📄 Example Queries
+## Example Queries
 
 See `test_queries.txt` for example voice or text queries the agent can handle:
 
