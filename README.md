@@ -2,40 +2,14 @@
 
 EstateWise is an AI-powered real estate voice agent enabling users to interact via speech or text to:
 
-- Retrieve property listings
-- Answer FAQs about the company
-- Connect users to a human agent for deal locking
-- Schedule meetings using Google Calendar
+* Retrieve property listings
+* Answer FAQs about the company
+* Connect users to a human agent for deal locking
+* Schedule meetings using Google Calendar
 
 ---
 
-## 🏗️ Architecture Overview
-
-- **Frontend:** Streamlit app for voice/text input and results display
-- **Backend:** FastAPI server for API endpoints and agent orchestration
-- **Vector DBs:** FAISS-based semantic search for listings and FAQs
-- **Google Calendar:** OAuth2 integration for scheduling
-- **Speech:** Whisper (STT), ElevenLabs (TTS), pydub, ffmpeg
-
-![Agent Diagram](media/agent_diagram.png)
-
----
-
-## ⚙️ Tech Stack & Main Dependencies
-
-- Python >= 3.10
-- Streamlit, FastAPI, Uvicorn
-- FAISS, SentenceTransformers
-- OpenAI, HuggingFace, Groq, NVIDIA APIs
-- ElevenLabs, AssemblyAI (speech)
-- Google API Client (calendar)
-- pydub, ffmpeg (audio)
-
-See `requirements.txt` for the full list.
-
----
-
-## 📁 Project Structure
+## Project Structure
 
 ```
 .
@@ -57,31 +31,21 @@ See `requirements.txt` for the full list.
 ├── requirements.txt                # Python dependencies
 ├── Dockerfile                      # Docker setup
 ├── .env                            # API keys and environment variables
-└── README.md                       # Project documentation
+├── requirements.txt                # Python dependencies
+├── README.md                       # Project documentation
 ```
 
 ---
 
-## 🧩 Core Modules Explained
+## Prerequisites
 
-- **agent.py**: Sets up the LangGraph agent, orchestrates tool usage.
-- **app.py**: Streamlit UI for user interaction (voice/text input, results display).
-- **server.py**: FastAPI backend for API endpoints (agent, listings, FAQ, calendar).
-- **faq_retriever.py / listings_retriever.py**: Query vector DBs for semantic search.
-- **utils/**: Audio (TTS/STT), embedding, Google Calendar, and other helpers.
-- **scripts/**: Data cleaning and vector DB creation utilities.
+* Python >= 3.10
+* FFmpeg installed (required by pydub)
+* Git
 
 ---
 
-## 📚 Prerequisites
-
-- Python >= 3.10
-- FFmpeg installed (required by pydub)
-- Git
-
----
-
-## 🚀 Installation Guide
+## Installation Guide
 
 ### 1. Clone the Repository
 
@@ -117,7 +81,7 @@ ELEVENLABS_API_KEY=your_elevenlabs_key
 ASSEMBLYAI_API_KEY=your_assemblyai_key
 ```
 
-> ✉️ Replace `your_*_key` with your actual API keys.
+> Replace `your_*_key` with your actual API keys.
 
 ### 5. Add Google Calendar Credentials
 
@@ -125,18 +89,7 @@ Place `credentials.json` (from Google Cloud) in the root directory.
 
 ---
 
-## 🐳 Quickstart with Docker (Optional)
-
-Build and run the app in a container:
-
-```bash
-docker build -t estatewise .
-docker run -p 8501:8501 --env-file .env estatewise
-```
-
----
-
-## 🌐 Run the App
+## Run the App
 
 ### Option 1: Streamlit Frontend
 
@@ -156,14 +109,14 @@ Access docs at [http://localhost:8000/docs](http://localhost:8000/docs)
 
 ---
 
-## 📅 Google Calendar Integration
+## Google Calendar Integration
 
 - On first use, a browser window will open to authorize access to your calendar.
 - A `token.pickle` file will be generated for future use.
 
 ---
 
-## 🔧 Vector DB Setup (First Time Only)
+## Vector DB Setup (Only First Time)
 
 If not already generated, run:
 
@@ -174,7 +127,7 @@ python scripts/create_listings_vectordb.py   # For listings
 
 ---
 
-## 🧪 Example Queries
+## Example Queries
 
 See `test_queries.txt` for example voice or text queries the agent can handle:
 
