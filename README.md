@@ -140,7 +140,7 @@ See `test_queries.txt` for example voice or text queries the agent can handle:
 
 ---
 
-## 🛠️ Troubleshooting & FAQ
+## Troubleshooting & FAQ
 
 - **FFmpeg not found?** Ensure ffmpeg is installed and in your PATH.
 - **Google Calendar not working?** Check `credentials.json` and `.env` variables.
@@ -149,22 +149,3 @@ See `test_queries.txt` for example voice or text queries the agent can handle:
 
 ---
 
-## 🤝 Contributing
-
-1. Fork the repo and create a feature branch.
-2. Make your changes with clear commit messages.
-3. Ensure code is formatted and tested.
-4. Open a pull request describing your changes.
-
----
-
-## 📬 Contact
-
-For questions, suggestions, or support, open an issue or contact the maintainer at [your-email@example.com].
-
----
-
-
-
-
-[def]: media/agent_diagram.png
